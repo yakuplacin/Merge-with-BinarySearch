@@ -1,0 +1,118 @@
+import java.util.Random;
+
+public class MergeBinary {
+
+	int binarySearch(int arr[], int l, int r, int x, int n2) {
+		if (r >= l) {
+			int mid = l + (r - l) / 2;
+
+			if (mid != n2) // check
+				if (arr[mid] == x) {
+					return mid;
+				}
+
+			if (arr[mid] > x)
+				return binarySearch(arr, l, mid - 1, x, n2);
+
+			return binarySearch(arr, mid + 1, r, x, n2);
+		}
+
+		return -1;
+	}
+
+	public static void merge_sort(int[] A, int left, int right) {
+
+		if (left >= right) {
+			return;
+		}
+
+		int middle = left + (right - left) / 2;
+
+		merge_sort(A, left, middle);
+		merge_sort(A, middle + 1, right);
+		merge(A, left, middle, right);
+
+	}
+
+	public static void merge(int[] A, int left, int middle, int right) {
+		int leftArraySize = middle - left + 1;
+		int rightArraySize = right - middle;
+
+		int[] leftArray = new int[leftArraySize];
+		int[] rightArray = new int[rightArraySize];
+
+		for (int i = 0; i < leftArraySize; i++) {
+			leftArray[i] = A[left + i];
+		}
+		for (int i = 0; i < rightArraySize; i++) {
+			rightArray[i] = A[middle + 1 + i];
+		}
+
+		int i = 0;
+		int j = 0;
+		int k = left;
+
+		while (i < leftArraySize && j < rightArraySize) {
+
+			if (leftArray[i] < rightArray[j]) {
+				A[k] = leftArray[i];
+				i++;
+				k++;
+			} else {
+				A[k] = rightArray[j];
+				j++;
+				k++;
+			}
+
+		}
+
+		while (i < leftArraySize) {
+			A[k] = leftArray[i];
+			i++;
+			k++;
+		}
+		while (j < rightArraySize) {
+			A[k] = rightArray[j];
+			j++;
+			k++;
+		}
+
+	}
+
+	public static void main(String[] args) {
+
+		MergeBinary ob = new MergeBinary();
+		int size = 300; // this is n that can be changed
+		int arr[] = new int[size];
+
+		Random rand = new Random();
+		rand.setSeed(System.currentTimeMillis());
+
+		for (int i = 0; i < size; i++) { // just gave a random numbers
+			arr[i] = rand.nextInt(100);
+		}
+
+		merge_sort(arr, 0, size - 1); // This merge sort will take nlgn time
+
+		int x = 56; // this one that we want to take it for ex. So we can change it.
+
+		int result = -1;
+		int temp = -1;
+
+		// Here it wil take also nlgn with binary search. so at total nlgn + nlgn will
+		// take again nlgn
+		for (int i = 0; i < arr.length; i++) {
+			temp = x - arr[i];
+
+			result = ob.binarySearch(arr, 0, arr.length - 1, temp, i);
+
+			if (result != -1) {
+				System.out.println("The total is found at indexes: " + i + " and " + result);
+				// we can put a break;
+			}
+			result = -1;
+
+		}
+	}
+
+}
